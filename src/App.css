@@ -1,0 +1,146 @@
+body {
+  background-color: #282c34;
+  min-height: 100vh; /*100% of viewport*/
+  padding-bottom: 10vh; /*footer height*/
+  position: relative;
+}
+
+.app {
+  padding-top: 1rem;
+}
+
+.header {
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: stretch;
+  justify-content: flex-start;
+  position: relative;
+  height: 100%;
+}
+
+.logo {
+  animation: App-logo-spin infinite 20s linear;
+  height: 5vmin;
+  pointer-events: none;
+}
+
+.todo-list {
+  color: white;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  line-height: 2rem;
+  padding-left: 2vw;
+  width: 95%;
+}
+
+.todo {
+  display: flex;
+  align-items: center;
+  margin: 1rem 0;
+}
+
+.checkbox {
+  width: 18px;
+  height: 18px;
+  border-radius: 30%;
+  margin-right: 10px;
+  cursor: pointer;
+  font-size: 10px;
+  display: flex;
+  flex: 0 0 18px;
+  justify-content: center;
+  align-items: center;
+  transition: background-color .2s ease-in-out;
+  border: 1px solid #fff;
+}
+
+.checkbox:hover {
+  background: rgba(255, 255, 255, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0);
+}
+
+.todo-is-completed .checkbox {
+  color: #000;
+  background: #fff;
+}
+
+.wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.wrapper span {
+  overflow: hidden;
+  position: absolute;
+  pointer-events: none;
+  width: 100%;
+}
+
+.todo-is-completed .wrapper span:after {
+  content: '';
+  display: block;
+	height: 2px;
+	box-shadow: 0 1px rgba(255,255,255,0.3);
+	margin-top: -1em;
+	background: #61DAFB;
+  transform-origin: center left;
+  animation-fill-mode: both;
+	animation: strikethrough 0.75s 0s cubic-bezier(.55, 0, .1, 1) 1;
+	transition: transform 0.5s cubic-bezier(.55, 0, .1, 1);
+}
+
+input {
+  border: none;
+  background: transparent;
+  color: white;
+  font-size: 1.4rem;
+  outline: none;
+  width: 100%;
+}
+
+.todo-is-completed input {
+  color: grey;
+  transition:color 0.55s 0.2s ease;
+}
+
+footer {
+  position:sticky;
+  bottom:0;
+  width: 100%;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+}
+
+footer div{
+  font-size: 1rem;
+  background-color: #1e2127;
+  color: grey;
+  margin: 10px;
+  padding: 10px;
+  border-radius: 10px;
+  text-align: center;
+  align-items: stretch;
+  line-height: 2ch;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes strikethrough {
+	from {
+		transform: scaleX(0);
+	}
+	to {
+		transform: scaleX(1);
+	}
+}
