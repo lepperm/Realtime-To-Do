@@ -5,10 +5,24 @@ import { bindActionCreators } from 'redux';
 import * as selectors from './store/selectors';
 import * as actions from './store/actions';
 
+import * as firebaseTodos from './firebase/firebaseTodos';
+
 import logo from './logo.svg';
 import './App.css';
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.todosObserver = null;
+  }
+
+  componentDidMount(){
+    this.todosObserver = firebaseTodos.todosObserver;
+  }
+
+  componentWillUnmount() {
+    this.todosObserver = firebaseTodos.todosUnsub;
+  }
 
   handleKeyDown(e, i) {
     const { todos } = this.props;
@@ -54,10 +68,10 @@ class App extends Component {
 
   createTodoAtIndex(e, i) {
     this.props.create(i);
-    /*
+    this.setState({ state: this.state });
     setTimeout(() => {
       document.forms[0].elements[i + 1].focus();
-    }, 0);*/
+    }, 0);
   }
 
   removeTodoAtIndex(i) {
@@ -71,10 +85,12 @@ class App extends Component {
 
   toggleTodoCompleteAtIndex(i) {
     this.props.toggleComplete(i);
+    this.setState({ state: this.state });
   }
 
   toggleTodoArchiveAtIndex(i) {
     this.props.archive(i);
+    this.setState({ state: this.state });
   }
 
   render(){

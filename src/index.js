@@ -1,16 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { createStore } from 'redux';
 import { Provider } from 'react-redux';
-import reducer from './store/reducer';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+import store from './store/store';
 import './index.css';
-
-const store = createStore(reducer);
 
 const app = (
   <Provider store={store}>
+    <script src="https://www.gstatic.com/firebasejs/7.15.0/firebase-app.js%22%3E"/>
+    <script src="https://www.gstatic.com/firebasejs/7.15.0/firebase-firestore.js%22%3E"/>
     <App />
   </Provider>
 );

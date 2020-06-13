@@ -35,3 +35,8 @@ export const archive = (index) => ({
         index,
     }
 });
+
+export const updateTodos = (todos) => ({
+    type: types.UPDATE_TODOS,
+    payload: todos
+});

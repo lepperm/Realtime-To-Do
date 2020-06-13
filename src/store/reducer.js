@@ -38,6 +38,9 @@ const reducer = (state = initialState, action) => {
             newTodos[action.payload.index].isArchived = !newTodos[action.payload.index].isArchived;
             return {...state, todos: newTodos}
 
+        case types.UPDATE_TODOS:
+            return {...state, todos: action.payload}
+
         default:
             return state;
     }
