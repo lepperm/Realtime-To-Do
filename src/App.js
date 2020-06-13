@@ -62,20 +62,25 @@ class App extends Component {
   }
 
   handleOnChange(e, i) {
-    this.props.update(i, e.target.value);
+    if (!this.props.todos[i]) return;
+    let newTodo = this.props.todos[i];
+    newTodo.content = e.target.value;
+    this.props.update(newTodo);
     this.setState({ state: this.state });
   }
 
   createTodoAtIndex(e, i) {
-    this.props.create(i);
+    if (!this.props.todos[i]) return;
+    this.props.create();
     this.setState({ state: this.state });
     setTimeout(() => {
-      document.forms[0].elements[i + 1].focus();
+      document.forms[0].elements[i+1].focus();
     }, 0);
   }
 
   removeTodoAtIndex(i) {
-    this.props.deleteTodo(i);
+    if (!this.props.todos[i]) return;
+    this.props.deleteTodo(this.props.todos[i].id);
     if(i - 1 >= 0) {
       setTimeout(() => {
         document.forms[0].elements[i - 1].focus();
@@ -84,12 +89,18 @@ class App extends Component {
   }
 
   toggleTodoCompleteAtIndex(i) {
-    this.props.toggleComplete(i);
+    let newTodo = this.props.todos[i];
+    newTodo.isCompleted = !newTodo.isCompleted;
+    if (!this.props.todos[i]) return;
+    this.props.update(newTodo);
     this.setState({ state: this.state });
   }
 
   toggleTodoArchiveAtIndex(i) {
-    this.props.archive(i);
+    let newTodo = this.props.todos[i];
+    newTodo.isArchived = !newTodo.isArchived;
+    if (!this.props.todos[i]) return;
+    this.props.update(newTodo);
     this.setState({ state: this.state });
   }
 
@@ -142,9 +153,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   create: bindActionCreators(actions.create, dispatch),
   update: bindActionCreators(actions.update, dispatch),
-  toggleComplete: bindActionCreators(actions.toggleComplete, dispatch),
   deleteTodo: bindActionCreators(actions.deleteTodo, dispatch),
-  archive: bindActionCreators(actions.archive, dispatch)
 });
 
 export default connect(mapStateToProps, mapDispatchToProps) (App);

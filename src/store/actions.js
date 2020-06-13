@@ -1,39 +1,35 @@
 import * as types from './actionTypes';
+import { doCreateTodo, doUpdateTodo, doDeleteTodo } from '../firebase/firebaseTodos';
 
-export const create = (index) => ({
+export const create = () => ({
     type: types.CREATE,
-    payload: {
-        index
-    }
+    payload: new Promise((resolve,reject) => {
+        doCreateTodo({
+            content: '',
+            isCompleted: false,
+            isArchived: false
+        }).then(() => {
+            resolve();
+        }).catch(error => reject(error));
+    })
 });
 
-export const update = (index, content) => ({
+export const update = (todo) => ({
     type: types.UPDATE,
-    payload: {
-        index,
-        content
-    }
+    payload: new Promise((resolve,reject) => {
+        doUpdateTodo(todo).then(() => {
+            resolve();
+        }).catch(error => reject(error))
+    })
 });
 
-export const toggleComplete = (index) => ({
-    type: types.TOGGLE_COMPLETE,
-    payload: {
-        index
-    }
-});
-
-export const deleteTodo = (index) => ({
+export const deleteTodo = (id) => ({
     type: types.DELETE,
-    payload: {
-        index
-    }
-});
-
-export const archive = (index) => ({
-    type: types.ARCHIVE,
-    payload: {
-        index,
-    }
+    payload: new Promise((resolve,reject) => {
+        doDeleteTodo(id).then(() => {
+            resolve();
+        }).catch(error => reject(error));
+    })
 });
 
 export const updateTodos = (todos) => ({
