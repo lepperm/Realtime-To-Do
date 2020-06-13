@@ -1,27 +1,22 @@
-// The following framework used below was adapted from James King's excellent To-Do list tutorial found here:
-// https://upmostly.com/tutorials/build-a-todo-app-in-react-using-hooks
-
 import React, { Component } from 'react';
+
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import * as selectors from './store/selectors';
+import * as actions from './store/actions';
+
 import logo from './logo.svg';
 import './App.css';
 
 class App extends Component {
-  constructor (props) {
-    super(props); //sends to component correctly
-    this.state = {
-      todos:[{
-        content: '',
-        isCompleted: false,
-        isArchived: false
-      }]
-    };
-  }
 
   handleKeyDown(e, i) {
-    const { todos } = this.state;
+    const { todos } = this.props;
+
     // Enter to create a new entry OR down key when at the end of the list
     // Ctrl + Enter will complete the currently selected to-do
     if (e.key === 'Enter' || (e.keyCode === 40 && i === todos.length-1)) {
+      e.preventDefault();
       if(e.ctrlKey){
         this.toggleTodoCompleteAtIndex(i);
       } else {
@@ -30,18 +25,18 @@ class App extends Component {
     }
     // Backspace, delete an empty todo
     // Ctrl + backspace will delete todos with text
-    if (e.key === 'Backspace' && (todos[i].content ==='' || e.ctrlKey)) {
+    else if (e.key === 'Backspace' && (todos[i].content ==='' || e.ctrlKey)) {
       e.preventDefault();
-      return this.removeTodoAtIndex(i);
+      this.removeTodoAtIndex(i);
     }
         // Down key, navigate down in the list
-    if (e.keyCode === 40 && i < todos.length-1) {
+        else if (e.keyCode === 40 && i < todos.length-1) {
       setTimeout(() => {
         document.forms[0].elements[i + 1].focus();
       }, 0);
     }
     // Up key, navigate up in the list
-    if (e.keyCode === 38 && i > 0) {
+    else if (e.keyCode === 38 && i > 0) {
       // By preventing default in the input field, the cursor should
       // "stick" to the end of the line when navigating up and down
       e.preventDefault();
@@ -49,33 +44,24 @@ class App extends Component {
         document.forms[0].elements[i - 1].focus();
       }, 0);
     }
+    this.setState({ state: this.state });
+  }
+
+  handleOnChange(e, i) {
+    this.props.update(i, e.target.value);
+    this.setState({ state: this.state });
   }
 
   createTodoAtIndex(e, i) {
-    const { todos } = this.state;
-    const newTodos = [...todos];
-    newTodos.splice(i + 1, 0, {
-      content: '',
-      isCompleted: false,
-    });
-    this.setState({todos: newTodos});
+    this.props.create(i);
+    /*
     setTimeout(() => {
       document.forms[0].elements[i + 1].focus();
-    }, 0);
-  }
-
-  updateTodoAtIndex(e, i) {
-    const { todos } = this.state;
-    const newTodos = [...todos];
-    newTodos[i].content = e.target.value;
-    this.setState({todos: newTodos});
+    }, 0);*/
   }
 
   removeTodoAtIndex(i) {
-    const { todos } = this.state;
-    if (i === 0 && todos.length === 1) return;
-    let delTodos = todos.slice(0, i).concat(todos.slice(i + 1, todos.length));
-    this.setState({todos: delTodos});
+    this.props.deleteTodo(i);
     if(i - 1 >= 0) {
       setTimeout(() => {
         document.forms[0].elements[i - 1].focus();
@@ -83,15 +69,16 @@ class App extends Component {
     }
   }
 
-  toggleTodoCompleteAtIndex(index) {
-    const { todos } = this.state;
-    const temporaryTodos = [...todos];
-    temporaryTodos[index].isCompleted = !temporaryTodos[index].isCompleted;
-    this.setState({todos: temporaryTodos});
+  toggleTodoCompleteAtIndex(i) {
+    this.props.toggleComplete(i);
+  }
+
+  toggleTodoArchiveAtIndex(i) {
+    this.props.archive(i);
   }
 
   render(){
-    const { todos } = this.state;
+    const { todos } = this.props;
 
     return (
       <div className="app">
@@ -99,7 +86,7 @@ class App extends Component {
           <img src={logo} className="logo" alt="logo" />
           <form className="todo-list">
             <ul>
-              {todos.map((todo, i) => (
+            {todos.map((todo, i) => (
                 <div className={`todo ${todo.isCompleted && 'todo-is-completed'}`}>
                   <div className={'checkbox'} onClick={() => this.toggleTodoCompleteAtIndex(i)}>
                     {todo.isCompleted && (
@@ -112,7 +99,7 @@ class App extends Component {
                       type="text"
                       value={todo.content}
                       onKeyDown={e => this.handleKeyDown(e, i)}
-                      onChange={e => this.updateTodoAtIndex(e, i)}
+                      onChange={e => this.handleOnChange(e, i)}
                       placeholder='...'
                     />
                   </div>
@@ -125,10 +112,23 @@ class App extends Component {
           <div>Press enter to add a new to-do</div>
           <div>Press ctrl+enter to mark the to-do complete</div>
           <div>Press ctrl+backspace to delete a to-do</div>
+          <input type="button" value="Archive Complete" onClick={this.submitForm} />
         </footer>
       </div>
     );
   }
 }
 
-export default App;
+const mapStateToProps = state => ({
+  todos: selectors.getTodos(state)
+});
+
+const mapDispatchToProps = dispatch => ({
+  create: bindActionCreators(actions.create, dispatch),
+  update: bindActionCreators(actions.update, dispatch),
+  toggleComplete: bindActionCreators(actions.toggleComplete, dispatch),
+  deleteTodo: bindActionCreators(actions.deleteTodo, dispatch),
+  archive: bindActionCreators(actions.archive, dispatch)
+});
+
+export default connect(mapStateToProps, mapDispatchToProps) (App);
