@@ -1,27 +1,11 @@
 body {
   background-color: #282c34;
   min-height: 100vh; /*100% of viewport*/
-  padding-bottom: 10vh; /*footer height*/
   position: relative;
 }
 
 .app {
   padding-top: 1rem;
-}
-
-.header {
-  display: flex;
-  flex-flow: column nowrap;
-  align-items: stretch;
-  justify-content: flex-start;
-  position: relative;
-  height: 100%;
-}
-
-.logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 5vmin;
-  pointer-events: none;
 }
 
 .todo-list {
@@ -104,36 +88,6 @@ input {
 .todo-is-completed input {
   color: grey;
   transition:color 0.55s 0.2s ease;
-}
-
-footer {
-  position:sticky;
-  bottom:0;
-  width: 100%;
-  display: flex;
-  flex-flow: row wrap;
-  justify-content: center;
-}
-
-footer div{
-  font-size: 1rem;
-  background-color: #1e2127;
-  color: grey;
-  margin: 10px;
-  padding: 10px;
-  border-radius: 10px;
-  text-align: center;
-  align-items: stretch;
-  line-height: 2ch;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
 }
 
 @keyframes strikethrough {

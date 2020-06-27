@@ -1,6 +1,6 @@
 import db from './firebaseInit';
-import store from '../store/store';
-import { updateTodos } from '../store/actions';
+import store from '../Store/store';
+import { updateTodos } from '../Store/actions';
 
 let todos = db.collection('todos');
 

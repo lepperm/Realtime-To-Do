@@ -1,5 +1,5 @@
 import * as types from './actionTypes';
-import { doCreateTodo, doUpdateTodo, doDeleteTodo } from '../firebase/firebaseTodos';
+import { doCreateTodo, doUpdateTodo, doDeleteTodo } from '../Firebase/firebaseTodos';
 
 export const create = () => ({
     type: types.CREATE,

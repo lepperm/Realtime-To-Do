@@ -1,0 +1,57 @@
+.header {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  height: 100%;
+  color: rgb(218, 218, 218);
+  font-size: 1.8rem;
+}
+
+.logo {
+  align-self: flex-start;
+  animation: App-logo-spin infinite 20s linear;
+  height: 1.8rem;
+  pointer-events: none;
+}
+
+.title {
+  cursor: default;
+}
+
+.button {
+  margin-left: auto;
+  margin-right: 2vmin;
+  padding-inline: 5px;
+  border-radius: 5px;
+  font-size: 1.1rem;
+  text-align: center;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+  border: 1px solid #fff;
+}
+
+.button:hover {
+  background: rgba(255, 255, 255, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0);
+}
+
+@media only screen and (max-width: 768px) {
+  .title {
+    font-size: 1rem;
+  }
+
+  .button {
+    font-size: 0.9rem;
+  }
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
