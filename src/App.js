@@ -73,7 +73,7 @@ class App extends Component {
 
   createTodoAtIndex(e, i) {
     if (!this.props.todos[i]) return;
-    this.props.create();
+    this.props.create(i + 1);
     this.setState({ state: this.state });
     setTimeout(() => {
       document.forms[0].elements[i + 1].focus();
@@ -112,42 +112,35 @@ class App extends Component {
     return (
       <div className="app">
         <Header />
-        <body>
+        <div>
           <form className="todo-list">
             <ul>
               {todos.map((todo, i) => (
-                <>
-                  {todo.isArchived ? (
-                    <></> // Empty element, recommended over null
-                  ) : (
-                    <div
-                      className={`todo ${
-                        todo.isCompleted && "todo-is-completed"
-                      }`}
-                    >
-                      <div
-                        className={"checkbox"}
-                        onClick={() => this.toggleTodoCompleteAtIndex(i)}
-                      >
-                        {todo.isCompleted && <span>&#x2714;</span>}
-                      </div>
-                      <div className="wrapper">
-                        <span className="strikethrough">&nbsp;</span>
-                        <input
-                          type="text"
-                          value={todo.content}
-                          onKeyDown={(e) => this.handleKeyDown(e, i)}
-                          onChange={(e) => this.handleOnChange(e, i)}
-                          placeholder="..."
-                        />
-                      </div>
-                    </div>
-                  )}
-                </>
+                <div
+                  key={i}
+                  className={`todo ${todo.isCompleted && "todo-is-completed"}`}
+                >
+                  <div
+                    className={"checkbox"}
+                    onClick={() => this.toggleTodoCompleteAtIndex(i)}
+                  >
+                    {todo.isCompleted && <span>&#x2714;</span>}
+                  </div>
+                  <div className="wrapper">
+                    <span className="strikethrough">&nbsp;</span>
+                    <input
+                      type="text"
+                      value={todo.content}
+                      onKeyDown={(e) => this.handleKeyDown(e, i)}
+                      onChange={(e) => this.handleOnChange(e, i)}
+                      placeholder="..."
+                    />
+                  </div>
+                </div>
               ))}
             </ul>
           </form>
-        </body>
+        </div>
         <Footer />
       </div>
     );

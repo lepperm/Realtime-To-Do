@@ -1,36 +1,48 @@
-import db from './firebaseInit';
-import store from '../Store/store';
-import { updateTodos } from '../Store/actions';
+import db from "./firebaseInit";
+import store from "../Store/store";
+import { updateTodos } from "../Store/actions";
+import * as selectors from "../Store/selectors.js";
 
-let todos = db.collection('todos');
+let todos = db.collection("todos");
 
 export const doUpdateTodo = (todo) => {
-    return todos.doc(todo.id).update({
-        content: todo.content,
-        isCompleted: todo.isCompleted,
-        isArchived: todo.isArchived
-    });
+  let localTodos = selectors.getTodos(store.getState());
+  let myTodo = localTodos.find((localTodo) => localTodo.id === todo.id);
+  //compare position and batch upstream
+
+  return todos.doc(todo.id).update({
+    content: todo.content,
+    isCompleted: todo.isCompleted,
+    isArchived: todo.isArchived,
+    position: todo.position,
+  });
 };
 
 export const doCreateTodo = (todo) => {
-    return todos.add({
-        content: todo.content,
-        isCompleted: todo.isCompleted,
-        isArchived: todo.isArchived
-    });
-}
-
-export const doDeleteTodo = (id) => {
-    return todos.doc(id).delete();
+  return todos.add({
+    content: todo.content,
+    isCompleted: todo.isCompleted,
+    isArchived: todo.isArchived,
+    position: todo.position,
+  });
 };
 
-export const todosObserver = todos.onSnapshot(collectionSnapshot => {
+export const doDeleteTodo = (id) => {
+  return todos.doc(id).delete();
+};
+
+export const todosObserver = todos.onSnapshot(
+  (collectionSnapshot) => {
     let todoList = [];
-    collectionSnapshot.forEach(doc => {
-        todoList.push({...doc.data(), id: doc.id});
-    })
+    collectionSnapshot.forEach((doc) => {
+      todoList.push({ ...doc.data(), id: doc.id });
+    });
 
     store.dispatch(updateTodos(todoList));
-},error => {console.log("Firebase error: " + error.message);});
+  },
+  (error) => {
+    console.log("Firebase error: " + error.message);
+  }
+);
 
 export const todosUnsub = todos.onSnapshot(() => {});
