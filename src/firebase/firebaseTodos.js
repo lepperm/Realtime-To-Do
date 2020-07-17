@@ -1,16 +1,14 @@
 import db from "./firebaseInit";
 import store from "../Store/store";
 import { updateTodos } from "../Store/actions";
-//import * as selectors from "../Store/selectors.js";
+import * as selectors from "../Store/selectors.js";
 
 let todos = db.collection("todos");
 
 export const doUpdateTodo = (todo) => {
-  //let localTodos = selectors.getTodos(store.getState());
-  //let movedTodos = localTodos.find((localTodo) => localTodo.id === todo.id);
-
-  //--- compare position and batch changes ---
-  // https://firebase.google.com/docs/firestore/manage-data/transactions
+  let localTodos = selectors.getTodos(store.getState());
+  let myTodo = localTodos.find((localTodo) => localTodo.id === todo.id);
+  //compare position and batch upstream
 
   return todos.doc(todo.id).update({
     content: todo.content,
